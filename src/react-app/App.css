@@ -1,45 +1,384 @@
 #root {
-	max-width: 1280px;
+	min-height: 100vh;
+}
+
+.app-shell {
+	width: min(1440px, 100%);
 	margin: 0 auto;
-	padding: 2rem;
+	padding: 28px;
+}
+
+.topbar {
+	display: flex;
+	align-items: flex-end;
+	justify-content: space-between;
+	gap: 24px;
+	margin-bottom: 18px;
+}
+
+.eyebrow {
+	margin: 0 0 4px;
+	color: #576579;
+	font-size: 0.78rem;
+	font-weight: 700;
+	text-transform: uppercase;
+}
+
+h1,
+h2 {
+	margin: 0;
+	color: #132033;
+	letter-spacing: 0;
+}
+
+h1 {
+	font-size: clamp(2rem, 4vw, 3.2rem);
+	line-height: 1;
+}
+
+h2 {
+	font-size: 1rem;
+}
+
+.summary {
+	display: flex;
+	gap: 10px;
+	flex-wrap: wrap;
+	justify-content: flex-end;
+}
+
+.summary span {
+	border: 1px solid #d8dee8;
+	border-radius: 999px;
+	background: #ffffff;
+	color: #26364b;
+	font-weight: 700;
+	padding: 8px 12px;
+}
+
+.alert {
+	border-radius: 8px;
+	margin-bottom: 14px;
+	padding: 12px 14px;
+	font-weight: 700;
+}
+
+.alert.error {
+	background: #fff0f0;
+	border: 1px solid #f3b3b3;
+	color: #8d1e1e;
+}
+
+.alert.success {
+	background: #edf8f1;
+	border: 1px solid #a9d8b9;
+	color: #176133;
+}
+
+.workspace {
+	display: grid;
+	grid-template-columns: 1fr;
+	align-items: start;
+}
+
+.panel {
+	background: #ffffff;
+	border: 1px solid #dce3ed;
+	border-radius: 8px;
+	box-shadow: 0 16px 40px rgb(20 37 63 / 7%);
+}
+
+.table-panel {
+	overflow: hidden;
+}
+
+.panel-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 14px;
+	padding: 16px;
+	border-bottom: 1px solid #e7ecf3;
+}
+
+.panel-actions {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+}
+
+.table-wrap {
+	overflow-x: auto;
+}
+
+table {
+	width: 100%;
+	min-width: 860px;
+	border-collapse: collapse;
+}
+
+th,
+td {
+	padding: 12px 14px;
+	border-bottom: 1px solid #edf1f6;
+	text-align: left;
+	vertical-align: top;
+}
+
+th {
+	background: #f8fafc;
+	color: #526073;
+	font-size: 0.76rem;
+	text-transform: uppercase;
+}
+
+td {
+	color: #1d2d44;
+}
+
+.empty-cell {
+	color: #6c7888;
 	text-align: center;
+	height: 72px;
 }
 
-.logo {
-	height: 6em;
-	padding: 1.5em;
-	will-change: filter;
-	transition: filter 300ms;
-}
-.logo:hover {
-	filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-	filter: drop-shadow(0 0 2em #61dafbaa);
-}
-.logo.cloudflare:hover {
-	filter: drop-shadow(0 0 2em #f6821faa);
+.row-actions {
+	display: flex;
+	gap: 8px;
+	flex-wrap: wrap;
+	min-width: 196px;
 }
 
-@keyframes logo-spin {
-	from {
-		transform: rotate(0deg);
+.status {
+	display: inline-flex;
+	align-items: center;
+	border-radius: 999px;
+	padding: 4px 10px;
+	font-size: 0.78rem;
+	font-weight: 700;
+}
+
+.status.active {
+	background: #e8f5ed;
+	color: #166637;
+}
+
+.status.inactive {
+	background: #edf0f5;
+	color: #566274;
+}
+
+.form-panel,
+.detail-panel {
+	padding: 16px;
+}
+
+.form-panel {
+	display: grid;
+	gap: 14px;
+}
+
+.field-grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 12px;
+}
+
+.span-2 {
+	grid-column: 1 / -1;
+}
+
+label {
+	display: grid;
+	gap: 6px;
+	color: #526073;
+	font-size: 0.86rem;
+	font-weight: 700;
+}
+
+input,
+select,
+textarea {
+	width: 100%;
+	box-sizing: border-box;
+	border: 1px solid #cfd8e5;
+	border-radius: 7px;
+	background: #ffffff;
+	color: #142033;
+	font: inherit;
+	padding: 10px 11px;
+	outline: none;
+}
+
+textarea {
+	min-height: 86px;
+	resize: vertical;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+	border-color: #2f6fbd;
+	box-shadow: 0 0 0 3px rgb(47 111 189 / 14%);
+}
+
+button {
+	border: 1px solid #b9c5d5;
+	border-radius: 7px;
+	background: #ffffff;
+	color: #1b2a3f;
+	cursor: pointer;
+	font: inherit;
+	font-weight: 700;
+	padding: 9px 12px;
+	transition:
+		background 160ms ease,
+		border-color 160ms ease,
+		color 160ms ease;
+}
+
+button:hover {
+	background: #f2f6fb;
+	border-color: #8fa1ba;
+}
+
+button:disabled {
+	cursor: not-allowed;
+	opacity: 0.65;
+}
+
+.primary,
+.form-actions button[type="submit"] {
+	background: #2f6fbd;
+	border-color: #2f6fbd;
+	color: #ffffff;
+}
+
+.primary:hover,
+.form-actions button[type="submit"]:hover {
+	background: #265d9f;
+	border-color: #265d9f;
+}
+
+.icon-button {
+	display: inline-grid;
+	place-items: center;
+	width: 38px;
+	height: 38px;
+	padding: 0;
+	font-size: 1.25rem;
+	line-height: 1;
+}
+
+button.danger {
+	color: #9a2b2b;
+	border-color: #e0b5b5;
+}
+
+button.danger:hover,
+button.danger.solid {
+	background: #b23a3a;
+	border-color: #b23a3a;
+	color: #ffffff;
+}
+
+dl {
+	display: grid;
+	grid-template-columns: 92px minmax(0, 1fr);
+	gap: 8px 12px;
+	margin: 14px 0 0;
+}
+
+dt {
+	color: #657286;
+	font-weight: 700;
+}
+
+dd {
+	margin: 0;
+	color: #1d2d44;
+	overflow-wrap: anywhere;
+}
+
+.muted {
+	color: #687588;
+	margin: 14px 0 0;
+}
+
+.modal-backdrop {
+	position: fixed;
+	inset: 0;
+	z-index: 20;
+	display: grid;
+	place-items: center;
+	background: rgb(15 23 42 / 48%);
+	padding: 20px;
+}
+
+.modal {
+	width: min(720px, 100%);
+	max-height: min(760px, calc(100vh - 40px));
+	overflow: auto;
+	background: #ffffff;
+	border: 1px solid #dce3ed;
+	border-radius: 8px;
+	box-shadow: 0 24px 70px rgb(15 23 42 / 24%);
+}
+
+.modal-header {
+	position: sticky;
+	top: 0;
+	z-index: 1;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	padding: 16px;
+	background: #ffffff;
+	border-bottom: 1px solid #e7ecf3;
+}
+
+.modal .form-panel,
+.modal .detail-panel {
+	padding: 16px;
+}
+
+.form-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 10px;
+}
+
+@media (max-width: 720px) {
+	.app-shell {
+		padding: 18px;
 	}
-	to {
-		transform: rotate(360deg);
+
+	.topbar {
+		align-items: flex-start;
+		flex-direction: column;
 	}
-}
 
-@media (prefers-reduced-motion: no-preference) {
-	a:nth-of-type(2) .logo {
-		animation: logo-spin infinite 20s linear;
+	.summary {
+		justify-content: flex-start;
 	}
-}
 
-.card {
-	padding: 2em;
-}
+	.panel-header,
+	.panel-actions,
+	.form-actions {
+		align-items: stretch;
+		flex-direction: column;
+	}
 
-.read-the-docs {
-	color: #888;
+	.icon-button {
+		width: 100%;
+	}
+
+	.field-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.span-2 {
+		grid-column: auto;
+	}
 }
