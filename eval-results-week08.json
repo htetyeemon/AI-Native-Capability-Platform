@@ -1,0 +1,3304 @@
+{
+  "generated_at": "2026-10-26T13:30:58.637Z",
+  "capability": "Week 08 course inquiry classification (Laya + fallback)",
+  "improvement": "More relevant grounding context: retrieved policy records in model state",
+  "repetitions": 5,
+  "total_cases": 10,
+  "correctness_definition": {
+    "routing": "category, route_to, and escalate_to_human all match the pre-defined expected decision",
+    "strict": "category, route_to, confidence, escalate_to_human, rationale, and source all match the pre-defined expected decision"
+  },
+  "fallback_simulation": "Cases marked fallback are run through the local fallback path without calling Laya; all other cases call Laya and fall back only on error.",
+  "health": {
+    "status": "ok",
+    "loaded": [
+      "typed-decisions",
+      "multilingual",
+      "english"
+    ],
+    "revisions": {
+      "english": "7b928d828b7b0e022f929d9bd2e44165aa270148",
+      "multilingual": "7b928d828b7b0e022f929d9bd2e44165aa270148",
+      "typed-decisions": "7b928d828b7b0e022f929d9bd2e44165aa270148"
+    },
+    "device": "cpu",
+    "device_is_preference": false,
+    "checkpoint_devices": {
+      "typed-decisions": "cpu",
+      "multilingual": "cpu",
+      "english": "cpu"
+    },
+    "cpu_fallbacks": {
+      "typed-decisions": {
+        "count": 0,
+        "last_reason": null
+      },
+      "multilingual": {
+        "count": 0,
+        "last_reason": null
+      },
+      "english": {
+        "count": 0,
+        "last_reason": null
+      }
+    }
+  },
+  "before": {
+    "cases": [
+      {
+        "case_id": "N-01",
+        "case_type": "normal",
+        "expected": {
+          "category": "grading",
+          "route_to": "instructor",
+          "confidence": "medium",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "model"
+        },
+        "actual_first": {
+          "category": "grading",
+          "route_to": "instructor",
+          "confidence": "medium",
+          "escalate_to_human": "no",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "routing_correct": false,
+        "strict_correct": false,
+        "stable_across_repetitions": true,
+        "paths": [
+          "model"
+        ],
+        "model_errors": [],
+        "knowledge_ids": [],
+        "latency": {
+          "count": 5,
+          "min_ms": 2179.99,
+          "median_ms": 2599.77,
+          "mean_ms": 4678.07,
+          "p95_ms": 8128.38,
+          "max_ms": 8128.38
+        }
+      },
+      {
+        "case_id": "N-02",
+        "case_type": "normal",
+        "expected": {
+          "category": "schedule",
+          "route_to": "department_admin",
+          "confidence": "high",
+          "escalate_to_human": "no",
+          "rationale": "clear_intent",
+          "source": "model"
+        },
+        "actual_first": {
+          "category": "schedule",
+          "route_to": "instructor",
+          "confidence": "medium",
+          "escalate_to_human": "yes",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "routing_correct": false,
+        "strict_correct": false,
+        "stable_across_repetitions": true,
+        "paths": [
+          "model"
+        ],
+        "model_errors": [],
+        "knowledge_ids": [],
+        "latency": {
+          "count": 5,
+          "min_ms": 2190.18,
+          "median_ms": 2442.62,
+          "mean_ms": 4422.88,
+          "p95_ms": 7771.31,
+          "max_ms": 7771.31
+        }
+      },
+      {
+        "case_id": "N-03",
+        "case_type": "normal",
+        "expected": {
+          "category": "instructor_contact",
+          "route_to": "instructor",
+          "confidence": "high",
+          "escalate_to_human": "no",
+          "rationale": "clear_intent",
+          "source": "model"
+        },
+        "actual_first": {
+          "category": "instructor_contact",
+          "route_to": "instructor",
+          "confidence": "high",
+          "escalate_to_human": "yes",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "routing_correct": false,
+        "strict_correct": false,
+        "stable_across_repetitions": true,
+        "paths": [
+          "model"
+        ],
+        "model_errors": [],
+        "knowledge_ids": [],
+        "latency": {
+          "count": 5,
+          "min_ms": 1998.36,
+          "median_ms": 2354.05,
+          "mean_ms": 3399.51,
+          "p95_ms": 7875.97,
+          "max_ms": 7875.97
+        }
+      },
+      {
+        "case_id": "E-01",
+        "case_type": "edge",
+        "expected": {
+          "category": "other",
+          "route_to": "escalate",
+          "confidence": "low",
+          "escalate_to_human": "yes",
+          "rationale": "ambiguous",
+          "source": "model"
+        },
+        "actual_first": {
+          "category": "grading",
+          "route_to": "instructor",
+          "confidence": "medium",
+          "escalate_to_human": "no",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "routing_correct": false,
+        "strict_correct": false,
+        "stable_across_repetitions": true,
+        "paths": [
+          "model"
+        ],
+        "model_errors": [],
+        "knowledge_ids": [],
+        "latency": {
+          "count": 5,
+          "min_ms": 520.77,
+          "median_ms": 589.31,
+          "mean_ms": 960.78,
+          "p95_ms": 2513.79,
+          "max_ms": 2513.79
+        }
+      },
+      {
+        "case_id": "E-02",
+        "case_type": "edge",
+        "expected": {
+          "category": "course_content",
+          "route_to": "student_support",
+          "confidence": "low",
+          "escalate_to_human": "yes",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "actual_first": {
+          "category": "course_content",
+          "route_to": "department_admin",
+          "confidence": "medium",
+          "escalate_to_human": "no",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "routing_correct": false,
+        "strict_correct": false,
+        "stable_across_repetitions": true,
+        "paths": [
+          "model"
+        ],
+        "model_errors": [],
+        "knowledge_ids": [],
+        "latency": {
+          "count": 5,
+          "min_ms": 1880.13,
+          "median_ms": 2132.05,
+          "mean_ms": 3078.76,
+          "p95_ms": 7166.96,
+          "max_ms": 7166.96
+        }
+      },
+      {
+        "case_id": "E-03",
+        "case_type": "edge",
+        "expected": {
+          "category": "prerequisites",
+          "route_to": "advising",
+          "confidence": "medium",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "model"
+        },
+        "actual_first": {
+          "category": "prerequisites",
+          "route_to": "advising",
+          "confidence": "medium",
+          "escalate_to_human": "no",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "routing_correct": false,
+        "strict_correct": false,
+        "stable_across_repetitions": true,
+        "paths": [
+          "model"
+        ],
+        "model_errors": [],
+        "knowledge_ids": [],
+        "latency": {
+          "count": 5,
+          "min_ms": 2105.59,
+          "median_ms": 2227.37,
+          "mean_ms": 3236.51,
+          "p95_ms": 7481.34,
+          "max_ms": 7481.34
+        }
+      },
+      {
+        "case_id": "D-01",
+        "case_type": "difficult_ambiguous",
+        "expected": {
+          "category": "other",
+          "route_to": "escalate",
+          "confidence": "low",
+          "escalate_to_human": "yes",
+          "rationale": "mixed_topics",
+          "source": "model"
+        },
+        "actual_first": {
+          "category": "other",
+          "route_to": "instructor",
+          "confidence": "medium",
+          "escalate_to_human": "no",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "routing_correct": false,
+        "strict_correct": false,
+        "stable_across_repetitions": true,
+        "paths": [
+          "model"
+        ],
+        "model_errors": [],
+        "knowledge_ids": [],
+        "latency": {
+          "count": 5,
+          "min_ms": 2153.13,
+          "median_ms": 2234.23,
+          "mean_ms": 3239.3,
+          "p95_ms": 7338.46,
+          "max_ms": 7338.46
+        }
+      },
+      {
+        "case_id": "D-02",
+        "case_type": "difficult_ambiguous",
+        "expected": {
+          "category": "prerequisites",
+          "route_to": "advising",
+          "confidence": "low",
+          "escalate_to_human": "yes",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "actual_first": {
+          "category": "grading",
+          "route_to": "escalate",
+          "confidence": "medium",
+          "escalate_to_human": "no",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "routing_correct": false,
+        "strict_correct": false,
+        "stable_across_repetitions": true,
+        "paths": [
+          "model"
+        ],
+        "model_errors": [],
+        "knowledge_ids": [],
+        "latency": {
+          "count": 5,
+          "min_ms": 2314.17,
+          "median_ms": 2436.46,
+          "mean_ms": 4558.57,
+          "p95_ms": 7870.45,
+          "max_ms": 7870.45
+        }
+      },
+      {
+        "case_id": "F-01",
+        "case_type": "fallback",
+        "expected": {
+          "category": "other",
+          "route_to": "student_support",
+          "confidence": "low",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "fallback_rules"
+        },
+        "actual_first": {
+          "category": "other",
+          "route_to": "student_support",
+          "confidence": "low",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "fallback_rules"
+        },
+        "routing_correct": true,
+        "strict_correct": true,
+        "stable_across_repetitions": true,
+        "paths": [
+          "fallback_simulated"
+        ],
+        "model_errors": [],
+        "knowledge_ids": [],
+        "latency": {
+          "count": 5,
+          "min_ms": 0.01,
+          "median_ms": 0.02,
+          "mean_ms": 0.09,
+          "p95_ms": 0.39,
+          "max_ms": 0.39
+        }
+      },
+      {
+        "case_id": "F-02",
+        "case_type": "fallback",
+        "expected": {
+          "category": "other",
+          "route_to": "instructor",
+          "confidence": "low",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "fallback_rules"
+        },
+        "actual_first": {
+          "category": "other",
+          "route_to": "escalate",
+          "confidence": "low",
+          "escalate_to_human": "yes",
+          "rationale": "ambiguous",
+          "source": "fallback_rules"
+        },
+        "routing_correct": false,
+        "strict_correct": false,
+        "stable_across_repetitions": true,
+        "paths": [
+          "fallback_simulated"
+        ],
+        "model_errors": [],
+        "knowledge_ids": [],
+        "latency": {
+          "count": 5,
+          "min_ms": 0.02,
+          "median_ms": 0.02,
+          "mean_ms": 0.1,
+          "p95_ms": 0.38,
+          "max_ms": 0.38
+        }
+      }
+    ],
+    "accuracy": {
+      "routing_correct_cases": 1,
+      "strict_correct_cases": 1,
+      "total_cases": 10,
+      "routing_accuracy_percent": 10,
+      "strict_accuracy_percent": 10
+    },
+    "latency": {
+      "all_requests": {
+        "count": 50,
+        "min_ms": 0.01,
+        "median_ms": 2227.37,
+        "mean_ms": 2757.46,
+        "p95_ms": 7875.97,
+        "max_ms": 8128.38
+      },
+      "model_requests": {
+        "count": 40,
+        "min_ms": 520.77,
+        "median_ms": 2304.48,
+        "mean_ms": 3446.8,
+        "p95_ms": 7875.97,
+        "max_ms": 8128.38
+      }
+    },
+    "usage": {
+      "model_requests": 40,
+      "input_tokens_total": 21650,
+      "output_tokens_total": 0,
+      "avg_input_tokens_per_model_request": 541.25,
+      "avg_output_tokens_per_model_request": 0,
+      "pricing": "N/A - self-hosted Laya; no metered API pricing"
+    }
+  },
+  "after": {
+    "cases": [
+      {
+        "case_id": "N-01",
+        "case_type": "normal",
+        "expected": {
+          "category": "grading",
+          "route_to": "instructor",
+          "confidence": "medium",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "model"
+        },
+        "actual_first": {
+          "category": "grading",
+          "route_to": "instructor",
+          "confidence": "high",
+          "escalate_to_human": "yes",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "routing_correct": true,
+        "strict_correct": false,
+        "stable_across_repetitions": true,
+        "paths": [
+          "model"
+        ],
+        "model_errors": [],
+        "knowledge_ids": [
+          "KB-GRD-001"
+        ],
+        "latency": {
+          "count": 5,
+          "min_ms": 4489,
+          "median_ms": 4782.62,
+          "mean_ms": 8715.48,
+          "p95_ms": 14887.86,
+          "max_ms": 14887.86
+        }
+      },
+      {
+        "case_id": "N-02",
+        "case_type": "normal",
+        "expected": {
+          "category": "schedule",
+          "route_to": "department_admin",
+          "confidence": "high",
+          "escalate_to_human": "no",
+          "rationale": "clear_intent",
+          "source": "model"
+        },
+        "actual_first": {
+          "category": "schedule",
+          "route_to": "department_admin",
+          "confidence": "medium",
+          "escalate_to_human": "yes",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "routing_correct": false,
+        "strict_correct": false,
+        "stable_across_repetitions": true,
+        "paths": [
+          "model"
+        ],
+        "model_errors": [],
+        "knowledge_ids": [
+          "KB-SCH-001"
+        ],
+        "latency": {
+          "count": 5,
+          "min_ms": 4382.53,
+          "median_ms": 4537.29,
+          "mean_ms": 6686.03,
+          "p95_ms": 14025.8,
+          "max_ms": 14025.8
+        }
+      },
+      {
+        "case_id": "N-03",
+        "case_type": "normal",
+        "expected": {
+          "category": "instructor_contact",
+          "route_to": "instructor",
+          "confidence": "high",
+          "escalate_to_human": "no",
+          "rationale": "clear_intent",
+          "source": "model"
+        },
+        "actual_first": {
+          "category": "instructor_contact",
+          "route_to": "instructor",
+          "confidence": "medium",
+          "escalate_to_human": "yes",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "routing_correct": false,
+        "strict_correct": false,
+        "stable_across_repetitions": true,
+        "paths": [
+          "model"
+        ],
+        "model_errors": [],
+        "knowledge_ids": [
+          "KB-CNT-002"
+        ],
+        "latency": {
+          "count": 5,
+          "min_ms": 3743.03,
+          "median_ms": 4401.5,
+          "mean_ms": 6070.49,
+          "p95_ms": 13557.59,
+          "max_ms": 13557.59
+        }
+      },
+      {
+        "case_id": "E-01",
+        "case_type": "edge",
+        "expected": {
+          "category": "other",
+          "route_to": "escalate",
+          "confidence": "low",
+          "escalate_to_human": "yes",
+          "rationale": "ambiguous",
+          "source": "model"
+        },
+        "actual_first": {
+          "category": "grading",
+          "route_to": "student_support",
+          "confidence": "low",
+          "escalate_to_human": "yes",
+          "rationale": "mixed_topics",
+          "source": "model"
+        },
+        "routing_correct": false,
+        "strict_correct": false,
+        "stable_across_repetitions": true,
+        "paths": [
+          "model"
+        ],
+        "model_errors": [],
+        "knowledge_ids": [],
+        "latency": {
+          "count": 5,
+          "min_ms": 549.98,
+          "median_ms": 633.54,
+          "mean_ms": 951.69,
+          "p95_ms": 2338.55,
+          "max_ms": 2338.55
+        }
+      },
+      {
+        "case_id": "E-02",
+        "case_type": "edge",
+        "expected": {
+          "category": "course_content",
+          "route_to": "student_support",
+          "confidence": "low",
+          "escalate_to_human": "yes",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "actual_first": {
+          "category": "course_content",
+          "route_to": "student_support",
+          "confidence": "medium",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "model"
+        },
+        "routing_correct": true,
+        "strict_correct": false,
+        "stable_across_repetitions": true,
+        "paths": [
+          "model"
+        ],
+        "model_errors": [],
+        "knowledge_ids": [
+          "KB-SUP-001"
+        ],
+        "latency": {
+          "count": 5,
+          "min_ms": 4086.35,
+          "median_ms": 4429.28,
+          "mean_ms": 6291.67,
+          "p95_ms": 14096.42,
+          "max_ms": 14096.42
+        }
+      },
+      {
+        "case_id": "E-03",
+        "case_type": "edge",
+        "expected": {
+          "category": "prerequisites",
+          "route_to": "advising",
+          "confidence": "medium",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "model"
+        },
+        "actual_first": {
+          "category": "prerequisites",
+          "route_to": "advising",
+          "confidence": "medium",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "model"
+        },
+        "routing_correct": true,
+        "strict_correct": true,
+        "stable_across_repetitions": true,
+        "paths": [
+          "model"
+        ],
+        "model_errors": [],
+        "knowledge_ids": [
+          "KB-PRE-001"
+        ],
+        "latency": {
+          "count": 5,
+          "min_ms": 4094.78,
+          "median_ms": 4369.33,
+          "mean_ms": 6134.73,
+          "p95_ms": 13372.05,
+          "max_ms": 13372.05
+        }
+      },
+      {
+        "case_id": "D-01",
+        "case_type": "difficult_ambiguous",
+        "expected": {
+          "category": "other",
+          "route_to": "escalate",
+          "confidence": "low",
+          "escalate_to_human": "yes",
+          "rationale": "mixed_topics",
+          "source": "model"
+        },
+        "actual_first": {
+          "category": "course_content",
+          "route_to": "student_support",
+          "confidence": "medium",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "model"
+        },
+        "routing_correct": false,
+        "strict_correct": false,
+        "stable_across_repetitions": true,
+        "paths": [
+          "model"
+        ],
+        "model_errors": [],
+        "knowledge_ids": [
+          "KB-SUP-001",
+          "KB-REG-001",
+          "KB-CNT-001"
+        ],
+        "latency": {
+          "count": 5,
+          "min_ms": 7545.73,
+          "median_ms": 7738.46,
+          "mean_ms": 12633.37,
+          "p95_ms": 23324.56,
+          "max_ms": 23324.56
+        }
+      },
+      {
+        "case_id": "D-02",
+        "case_type": "difficult_ambiguous",
+        "expected": {
+          "category": "prerequisites",
+          "route_to": "advising",
+          "confidence": "low",
+          "escalate_to_human": "yes",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "actual_first": {
+          "category": "grading",
+          "route_to": "escalate",
+          "confidence": "medium",
+          "escalate_to_human": "no",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "routing_correct": false,
+        "strict_correct": false,
+        "stable_across_repetitions": true,
+        "paths": [
+          "model"
+        ],
+        "model_errors": [],
+        "knowledge_ids": [],
+        "latency": {
+          "count": 5,
+          "min_ms": 2545.05,
+          "median_ms": 2614.74,
+          "mean_ms": 4833.7,
+          "p95_ms": 8231.84,
+          "max_ms": 8231.84
+        }
+      },
+      {
+        "case_id": "F-01",
+        "case_type": "fallback",
+        "expected": {
+          "category": "other",
+          "route_to": "student_support",
+          "confidence": "low",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "fallback_rules"
+        },
+        "actual_first": {
+          "category": "other",
+          "route_to": "student_support",
+          "confidence": "low",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "fallback_rules"
+        },
+        "routing_correct": true,
+        "strict_correct": true,
+        "stable_across_repetitions": true,
+        "paths": [
+          "fallback_simulated"
+        ],
+        "model_errors": [],
+        "knowledge_ids": [
+          "KB-FIN-001"
+        ],
+        "latency": {
+          "count": 5,
+          "min_ms": 0,
+          "median_ms": 0.01,
+          "mean_ms": 0.03,
+          "p95_ms": 0.1,
+          "max_ms": 0.1
+        }
+      },
+      {
+        "case_id": "F-02",
+        "case_type": "fallback",
+        "expected": {
+          "category": "other",
+          "route_to": "instructor",
+          "confidence": "low",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "fallback_rules"
+        },
+        "actual_first": {
+          "category": "other",
+          "route_to": "instructor",
+          "confidence": "low",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "fallback_rules"
+        },
+        "routing_correct": true,
+        "strict_correct": true,
+        "stable_across_repetitions": true,
+        "paths": [
+          "fallback_simulated"
+        ],
+        "model_errors": [],
+        "knowledge_ids": [
+          "KB-INT-001"
+        ],
+        "latency": {
+          "count": 5,
+          "min_ms": 0.01,
+          "median_ms": 0.02,
+          "mean_ms": 0.07,
+          "p95_ms": 0.26,
+          "max_ms": 0.26
+        }
+      }
+    ],
+    "accuracy": {
+      "routing_correct_cases": 5,
+      "strict_correct_cases": 3,
+      "total_cases": 10,
+      "routing_accuracy_percent": 50,
+      "strict_accuracy_percent": 30
+    },
+    "latency": {
+      "all_requests": {
+        "count": 50,
+        "min_ms": 0,
+        "median_ms": 4369.33,
+        "mean_ms": 5231.72,
+        "p95_ms": 14887.86,
+        "max_ms": 23324.56
+      },
+      "model_requests": {
+        "count": 40,
+        "min_ms": 549.98,
+        "median_ms": 4472.28,
+        "mean_ms": 6539.64,
+        "p95_ms": 14887.86,
+        "max_ms": 23324.56
+      }
+    },
+    "usage": {
+      "model_requests": 40,
+      "input_tokens_total": 50825,
+      "output_tokens_total": 0,
+      "avg_input_tokens_per_model_request": 1270.63,
+      "avg_output_tokens_per_model_request": 0,
+      "pricing": "N/A - self-hosted Laya; no metered API pricing"
+    }
+  },
+  "raw_records": {
+    "baseline": [
+      {
+        "case_id": "N-01",
+        "repetition": 1,
+        "decision": {
+          "category": "grading",
+          "route_to": "instructor",
+          "confidence": "medium",
+          "escalate_to_human": "no",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 2179.9874,
+        "usage": {
+          "input_tokens": 630,
+          "output_tokens": 0,
+          "state_tokens": 57,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "N-02",
+        "repetition": 1,
+        "decision": {
+          "category": "schedule",
+          "route_to": "instructor",
+          "confidence": "medium",
+          "escalate_to_human": "yes",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 2190.181699999999,
+        "usage": {
+          "input_tokens": 580,
+          "output_tokens": 0,
+          "state_tokens": 47,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "N-03",
+        "repetition": 1,
+        "decision": {
+          "category": "instructor_contact",
+          "route_to": "instructor",
+          "confidence": "high",
+          "escalate_to_human": "yes",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 2304.4780999999984,
+        "usage": {
+          "input_tokens": 575,
+          "output_tokens": 0,
+          "state_tokens": 46,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "E-01",
+        "repetition": 1,
+        "decision": {
+          "category": "grading",
+          "route_to": "instructor",
+          "confidence": "medium",
+          "escalate_to_human": "no",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 574.5749999999971,
+        "usage": {
+          "input_tokens": 400,
+          "output_tokens": 0,
+          "state_tokens": 16,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "E-02",
+        "repetition": 1,
+        "decision": {
+          "category": "course_content",
+          "route_to": "department_admin",
+          "confidence": "medium",
+          "escalate_to_human": "no",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 2057.6293000000005,
+        "usage": {
+          "input_tokens": 495,
+          "output_tokens": 0,
+          "state_tokens": 30,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "E-03",
+        "repetition": 1,
+        "decision": {
+          "category": "prerequisites",
+          "route_to": "advising",
+          "confidence": "medium",
+          "escalate_to_human": "no",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 2134.270199999999,
+        "usage": {
+          "input_tokens": 520,
+          "output_tokens": 0,
+          "state_tokens": 35,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "D-01",
+        "repetition": 1,
+        "decision": {
+          "category": "other",
+          "route_to": "instructor",
+          "confidence": "medium",
+          "escalate_to_human": "no",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 2153.1331999999966,
+        "usage": {
+          "input_tokens": 515,
+          "output_tokens": 0,
+          "state_tokens": 34,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "D-02",
+        "repetition": 1,
+        "decision": {
+          "category": "grading",
+          "route_to": "escalate",
+          "confidence": "medium",
+          "escalate_to_human": "no",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 2400.6417999999976,
+        "usage": {
+          "input_tokens": 615,
+          "output_tokens": 0,
+          "state_tokens": 54,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "F-01",
+        "repetition": 1,
+        "decision": {
+          "category": "other",
+          "route_to": "student_support",
+          "confidence": "low",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "fallback_rules"
+        },
+        "latency_ms": 0.3870999999999185,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        },
+        "knowledge_ids": [],
+        "path": "fallback_simulated",
+        "model_error": null
+      },
+      {
+        "case_id": "F-02",
+        "repetition": 1,
+        "decision": {
+          "category": "other",
+          "route_to": "escalate",
+          "confidence": "low",
+          "escalate_to_human": "yes",
+          "rationale": "ambiguous",
+          "source": "fallback_rules"
+        },
+        "latency_ms": 0.3824000000022352,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        },
+        "knowledge_ids": [],
+        "path": "fallback_simulated",
+        "model_error": null
+      },
+      {
+        "case_id": "N-01",
+        "repetition": 2,
+        "decision": {
+          "category": "grading",
+          "route_to": "instructor",
+          "confidence": "medium",
+          "escalate_to_human": "no",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 2468.227500000001,
+        "usage": {
+          "input_tokens": 630,
+          "output_tokens": 0,
+          "state_tokens": 57,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "N-02",
+        "repetition": 2,
+        "decision": {
+          "category": "schedule",
+          "route_to": "instructor",
+          "confidence": "medium",
+          "escalate_to_human": "yes",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 2308.0260999999955,
+        "usage": {
+          "input_tokens": 580,
+          "output_tokens": 0,
+          "state_tokens": 47,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "N-03",
+        "repetition": 2,
+        "decision": {
+          "category": "instructor_contact",
+          "route_to": "instructor",
+          "confidence": "high",
+          "escalate_to_human": "yes",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 2354.047700000003,
+        "usage": {
+          "input_tokens": 575,
+          "output_tokens": 0,
+          "state_tokens": 46,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "E-01",
+        "repetition": 2,
+        "decision": {
+          "category": "grading",
+          "route_to": "instructor",
+          "confidence": "medium",
+          "escalate_to_human": "no",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 589.3122000000003,
+        "usage": {
+          "input_tokens": 400,
+          "output_tokens": 0,
+          "state_tokens": 16,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "E-02",
+        "repetition": 2,
+        "decision": {
+          "category": "course_content",
+          "route_to": "department_admin",
+          "confidence": "medium",
+          "escalate_to_human": "no",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 2132.054999999993,
+        "usage": {
+          "input_tokens": 495,
+          "output_tokens": 0,
+          "state_tokens": 30,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "E-03",
+        "repetition": 2,
+        "decision": {
+          "category": "prerequisites",
+          "route_to": "advising",
+          "confidence": "medium",
+          "escalate_to_human": "no",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 2233.9796999999962,
+        "usage": {
+          "input_tokens": 520,
+          "output_tokens": 0,
+          "state_tokens": 35,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "D-01",
+        "repetition": 2,
+        "decision": {
+          "category": "other",
+          "route_to": "instructor",
+          "confidence": "medium",
+          "escalate_to_human": "no",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 2240.708899999998,
+        "usage": {
+          "input_tokens": 515,
+          "output_tokens": 0,
+          "state_tokens": 34,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "D-02",
+        "repetition": 2,
+        "decision": {
+          "category": "grading",
+          "route_to": "escalate",
+          "confidence": "medium",
+          "escalate_to_human": "no",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 2436.4600999999966,
+        "usage": {
+          "input_tokens": 615,
+          "output_tokens": 0,
+          "state_tokens": 54,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "F-01",
+        "repetition": 2,
+        "decision": {
+          "category": "other",
+          "route_to": "student_support",
+          "confidence": "low",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "fallback_rules"
+        },
+        "latency_ms": 0.023000000001047738,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        },
+        "knowledge_ids": [],
+        "path": "fallback_simulated",
+        "model_error": null
+      },
+      {
+        "case_id": "F-02",
+        "repetition": 2,
+        "decision": {
+          "category": "other",
+          "route_to": "escalate",
+          "confidence": "low",
+          "escalate_to_human": "yes",
+          "rationale": "ambiguous",
+          "source": "fallback_rules"
+        },
+        "latency_ms": 0.017600000006495975,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        },
+        "knowledge_ids": [],
+        "path": "fallback_simulated",
+        "model_error": null
+      },
+      {
+        "case_id": "N-01",
+        "repetition": 3,
+        "decision": {
+          "category": "grading",
+          "route_to": "instructor",
+          "confidence": "medium",
+          "escalate_to_human": "no",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 2599.7676999999967,
+        "usage": {
+          "input_tokens": 630,
+          "output_tokens": 0,
+          "state_tokens": 57,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "N-02",
+        "repetition": 3,
+        "decision": {
+          "category": "schedule",
+          "route_to": "instructor",
+          "confidence": "medium",
+          "escalate_to_human": "yes",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 2442.618199999997,
+        "usage": {
+          "input_tokens": 580,
+          "output_tokens": 0,
+          "state_tokens": 47,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "N-03",
+        "repetition": 3,
+        "decision": {
+          "category": "instructor_contact",
+          "route_to": "instructor",
+          "confidence": "high",
+          "escalate_to_human": "yes",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 2464.681799999991,
+        "usage": {
+          "input_tokens": 575,
+          "output_tokens": 0,
+          "state_tokens": 46,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "E-01",
+        "repetition": 3,
+        "decision": {
+          "category": "grading",
+          "route_to": "instructor",
+          "confidence": "medium",
+          "escalate_to_human": "no",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 605.4484999999986,
+        "usage": {
+          "input_tokens": 400,
+          "output_tokens": 0,
+          "state_tokens": 16,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "E-02",
+        "repetition": 3,
+        "decision": {
+          "category": "course_content",
+          "route_to": "department_admin",
+          "confidence": "medium",
+          "escalate_to_human": "no",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 2157.0014999999985,
+        "usage": {
+          "input_tokens": 495,
+          "output_tokens": 0,
+          "state_tokens": 30,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "E-03",
+        "repetition": 3,
+        "decision": {
+          "category": "prerequisites",
+          "route_to": "advising",
+          "confidence": "medium",
+          "escalate_to_human": "no",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 2227.374199999991,
+        "usage": {
+          "input_tokens": 520,
+          "output_tokens": 0,
+          "state_tokens": 35,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "D-01",
+        "repetition": 3,
+        "decision": {
+          "category": "other",
+          "route_to": "instructor",
+          "confidence": "medium",
+          "escalate_to_human": "no",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 2229.9589999999735,
+        "usage": {
+          "input_tokens": 515,
+          "output_tokens": 0,
+          "state_tokens": 34,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "D-02",
+        "repetition": 3,
+        "decision": {
+          "category": "grading",
+          "route_to": "escalate",
+          "confidence": "medium",
+          "escalate_to_human": "no",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 7870.453999999998,
+        "usage": {
+          "input_tokens": 615,
+          "output_tokens": 0,
+          "state_tokens": 54,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "F-01",
+        "repetition": 3,
+        "decision": {
+          "category": "other",
+          "route_to": "student_support",
+          "confidence": "low",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "fallback_rules"
+        },
+        "latency_ms": 0.019499999994877726,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        },
+        "knowledge_ids": [],
+        "path": "fallback_simulated",
+        "model_error": null
+      },
+      {
+        "case_id": "F-02",
+        "repetition": 3,
+        "decision": {
+          "category": "other",
+          "route_to": "escalate",
+          "confidence": "low",
+          "escalate_to_human": "yes",
+          "rationale": "ambiguous",
+          "source": "fallback_rules"
+        },
+        "latency_ms": 0.021999999997206032,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        },
+        "knowledge_ids": [],
+        "path": "fallback_simulated",
+        "model_error": null
+      },
+      {
+        "case_id": "N-01",
+        "repetition": 4,
+        "decision": {
+          "category": "grading",
+          "route_to": "instructor",
+          "confidence": "medium",
+          "escalate_to_human": "no",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 8128.380600000004,
+        "usage": {
+          "input_tokens": 630,
+          "output_tokens": 0,
+          "state_tokens": 57,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "N-02",
+        "repetition": 4,
+        "decision": {
+          "category": "schedule",
+          "route_to": "instructor",
+          "confidence": "medium",
+          "escalate_to_human": "yes",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 7771.305599999992,
+        "usage": {
+          "input_tokens": 580,
+          "output_tokens": 0,
+          "state_tokens": 47,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "N-03",
+        "repetition": 4,
+        "decision": {
+          "category": "instructor_contact",
+          "route_to": "instructor",
+          "confidence": "high",
+          "escalate_to_human": "yes",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 7875.965999999986,
+        "usage": {
+          "input_tokens": 575,
+          "output_tokens": 0,
+          "state_tokens": 46,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "E-01",
+        "repetition": 4,
+        "decision": {
+          "category": "grading",
+          "route_to": "instructor",
+          "confidence": "medium",
+          "escalate_to_human": "no",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 2513.7937000000093,
+        "usage": {
+          "input_tokens": 400,
+          "output_tokens": 0,
+          "state_tokens": 16,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "E-02",
+        "repetition": 4,
+        "decision": {
+          "category": "course_content",
+          "route_to": "department_admin",
+          "confidence": "medium",
+          "escalate_to_human": "no",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 7166.962500000023,
+        "usage": {
+          "input_tokens": 495,
+          "output_tokens": 0,
+          "state_tokens": 30,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "E-03",
+        "repetition": 4,
+        "decision": {
+          "category": "prerequisites",
+          "route_to": "advising",
+          "confidence": "medium",
+          "escalate_to_human": "no",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 7481.343500000017,
+        "usage": {
+          "input_tokens": 520,
+          "output_tokens": 0,
+          "state_tokens": 35,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "D-01",
+        "repetition": 4,
+        "decision": {
+          "category": "other",
+          "route_to": "instructor",
+          "confidence": "medium",
+          "escalate_to_human": "no",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 7338.460800000001,
+        "usage": {
+          "input_tokens": 515,
+          "output_tokens": 0,
+          "state_tokens": 34,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "D-02",
+        "repetition": 4,
+        "decision": {
+          "category": "grading",
+          "route_to": "escalate",
+          "confidence": "medium",
+          "escalate_to_human": "no",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 7771.143299999996,
+        "usage": {
+          "input_tokens": 615,
+          "output_tokens": 0,
+          "state_tokens": 54,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "F-01",
+        "repetition": 4,
+        "decision": {
+          "category": "other",
+          "route_to": "student_support",
+          "confidence": "low",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "fallback_rules"
+        },
+        "latency_ms": 0.019899999955669045,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        },
+        "knowledge_ids": [],
+        "path": "fallback_simulated",
+        "model_error": null
+      },
+      {
+        "case_id": "F-02",
+        "repetition": 4,
+        "decision": {
+          "category": "other",
+          "route_to": "escalate",
+          "confidence": "low",
+          "escalate_to_human": "yes",
+          "rationale": "ambiguous",
+          "source": "fallback_rules"
+        },
+        "latency_ms": 0.037099999957717955,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        },
+        "knowledge_ids": [],
+        "path": "fallback_simulated",
+        "model_error": null
+      },
+      {
+        "case_id": "N-01",
+        "repetition": 5,
+        "decision": {
+          "category": "grading",
+          "route_to": "instructor",
+          "confidence": "medium",
+          "escalate_to_human": "no",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 8013.965599999996,
+        "usage": {
+          "input_tokens": 630,
+          "output_tokens": 0,
+          "state_tokens": 57,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "N-02",
+        "repetition": 5,
+        "decision": {
+          "category": "schedule",
+          "route_to": "instructor",
+          "confidence": "medium",
+          "escalate_to_human": "yes",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 7402.272699999972,
+        "usage": {
+          "input_tokens": 580,
+          "output_tokens": 0,
+          "state_tokens": 47,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "N-03",
+        "repetition": 5,
+        "decision": {
+          "category": "instructor_contact",
+          "route_to": "instructor",
+          "confidence": "high",
+          "escalate_to_human": "yes",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 1998.3598000000347,
+        "usage": {
+          "input_tokens": 575,
+          "output_tokens": 0,
+          "state_tokens": 46,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "E-01",
+        "repetition": 5,
+        "decision": {
+          "category": "grading",
+          "route_to": "instructor",
+          "confidence": "medium",
+          "escalate_to_human": "no",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 520.7719999999972,
+        "usage": {
+          "input_tokens": 400,
+          "output_tokens": 0,
+          "state_tokens": 16,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "E-02",
+        "repetition": 5,
+        "decision": {
+          "category": "course_content",
+          "route_to": "department_admin",
+          "confidence": "medium",
+          "escalate_to_human": "no",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 1880.1329999999725,
+        "usage": {
+          "input_tokens": 495,
+          "output_tokens": 0,
+          "state_tokens": 30,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "E-03",
+        "repetition": 5,
+        "decision": {
+          "category": "prerequisites",
+          "route_to": "advising",
+          "confidence": "medium",
+          "escalate_to_human": "no",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 2105.5863000000245,
+        "usage": {
+          "input_tokens": 520,
+          "output_tokens": 0,
+          "state_tokens": 35,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "D-01",
+        "repetition": 5,
+        "decision": {
+          "category": "other",
+          "route_to": "instructor",
+          "confidence": "medium",
+          "escalate_to_human": "no",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 2234.231299999985,
+        "usage": {
+          "input_tokens": 515,
+          "output_tokens": 0,
+          "state_tokens": 34,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "D-02",
+        "repetition": 5,
+        "decision": {
+          "category": "grading",
+          "route_to": "escalate",
+          "confidence": "medium",
+          "escalate_to_human": "no",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 2314.171800000011,
+        "usage": {
+          "input_tokens": 615,
+          "output_tokens": 0,
+          "state_tokens": 54,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "F-01",
+        "repetition": 5,
+        "decision": {
+          "category": "other",
+          "route_to": "student_support",
+          "confidence": "low",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "fallback_rules"
+        },
+        "latency_ms": 0.013600000005681068,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        },
+        "knowledge_ids": [],
+        "path": "fallback_simulated",
+        "model_error": null
+      },
+      {
+        "case_id": "F-02",
+        "repetition": 5,
+        "decision": {
+          "category": "other",
+          "route_to": "escalate",
+          "confidence": "low",
+          "escalate_to_human": "yes",
+          "rationale": "ambiguous",
+          "source": "fallback_rules"
+        },
+        "latency_ms": 0.016699999978300184,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        },
+        "knowledge_ids": [],
+        "path": "fallback_simulated",
+        "model_error": null
+      }
+    ],
+    "improved": [
+      {
+        "case_id": "N-01",
+        "repetition": 1,
+        "decision": {
+          "category": "grading",
+          "route_to": "instructor",
+          "confidence": "high",
+          "escalate_to_human": "yes",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 4489.001399999999,
+        "usage": {
+          "input_tokens": 1370,
+          "output_tokens": 0,
+          "state_tokens": 205,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [
+          "KB-GRD-001"
+        ],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "N-02",
+        "repetition": 1,
+        "decision": {
+          "category": "schedule",
+          "route_to": "department_admin",
+          "confidence": "medium",
+          "escalate_to_human": "yes",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 4382.530699999999,
+        "usage": {
+          "input_tokens": 1305,
+          "output_tokens": 0,
+          "state_tokens": 192,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [
+          "KB-SCH-001"
+        ],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "N-03",
+        "repetition": 1,
+        "decision": {
+          "category": "instructor_contact",
+          "route_to": "instructor",
+          "confidence": "medium",
+          "escalate_to_human": "yes",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 4178.043900000001,
+        "usage": {
+          "input_tokens": 1260,
+          "output_tokens": 0,
+          "state_tokens": 183,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [
+          "KB-CNT-002"
+        ],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "E-01",
+        "repetition": 1,
+        "decision": {
+          "category": "grading",
+          "route_to": "student_support",
+          "confidence": "low",
+          "escalate_to_human": "yes",
+          "rationale": "mixed_topics",
+          "source": "model"
+        },
+        "latency_ms": 601.9887000000017,
+        "usage": {
+          "input_tokens": 435,
+          "output_tokens": 0,
+          "state_tokens": 23,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "E-02",
+        "repetition": 1,
+        "decision": {
+          "category": "course_content",
+          "route_to": "student_support",
+          "confidence": "medium",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "model"
+        },
+        "latency_ms": 4315.9015,
+        "usage": {
+          "input_tokens": 1305,
+          "output_tokens": 0,
+          "state_tokens": 192,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [
+          "KB-SUP-001"
+        ],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "E-03",
+        "repetition": 1,
+        "decision": {
+          "category": "prerequisites",
+          "route_to": "advising",
+          "confidence": "medium",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "model"
+        },
+        "latency_ms": 4314.793599999997,
+        "usage": {
+          "input_tokens": 1270,
+          "output_tokens": 0,
+          "state_tokens": 185,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [
+          "KB-PRE-001"
+        ],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "D-01",
+        "repetition": 1,
+        "decision": {
+          "category": "course_content",
+          "route_to": "student_support",
+          "confidence": "medium",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "model"
+        },
+        "latency_ms": 7545.726600000002,
+        "usage": {
+          "input_tokens": 2560,
+          "output_tokens": 0,
+          "state_tokens": 496,
+          "state_tokens_dropped": 96,
+          "truncated": true,
+          "truncated_questions": [
+            "category",
+            "route_to",
+            "confidence",
+            "escalate_to_human",
+            "rationale"
+          ]
+        },
+        "knowledge_ids": [
+          "KB-SUP-001",
+          "KB-REG-001",
+          "KB-CNT-001"
+        ],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "D-02",
+        "repetition": 1,
+        "decision": {
+          "category": "grading",
+          "route_to": "escalate",
+          "confidence": "medium",
+          "escalate_to_human": "no",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 2545.0541999999987,
+        "usage": {
+          "input_tokens": 660,
+          "output_tokens": 0,
+          "state_tokens": 63,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "F-01",
+        "repetition": 1,
+        "decision": {
+          "category": "other",
+          "route_to": "student_support",
+          "confidence": "low",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "fallback_rules"
+        },
+        "latency_ms": 0.0992000000042026,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        },
+        "knowledge_ids": [
+          "KB-FIN-001"
+        ],
+        "path": "fallback_simulated",
+        "model_error": null
+      },
+      {
+        "case_id": "F-02",
+        "repetition": 1,
+        "decision": {
+          "category": "other",
+          "route_to": "instructor",
+          "confidence": "low",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "fallback_rules"
+        },
+        "latency_ms": 0.25670000000536675,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        },
+        "knowledge_ids": [
+          "KB-INT-001"
+        ],
+        "path": "fallback_simulated",
+        "model_error": null
+      },
+      {
+        "case_id": "N-01",
+        "repetition": 2,
+        "decision": {
+          "category": "grading",
+          "route_to": "instructor",
+          "confidence": "high",
+          "escalate_to_human": "yes",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 4593.779500000004,
+        "usage": {
+          "input_tokens": 1370,
+          "output_tokens": 0,
+          "state_tokens": 205,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [
+          "KB-GRD-001"
+        ],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "N-02",
+        "repetition": 2,
+        "decision": {
+          "category": "schedule",
+          "route_to": "department_admin",
+          "confidence": "medium",
+          "escalate_to_human": "yes",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 4449.8963,
+        "usage": {
+          "input_tokens": 1305,
+          "output_tokens": 0,
+          "state_tokens": 192,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [
+          "KB-SCH-001"
+        ],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "N-03",
+        "repetition": 2,
+        "decision": {
+          "category": "instructor_contact",
+          "route_to": "instructor",
+          "confidence": "medium",
+          "escalate_to_human": "yes",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 4472.282600000006,
+        "usage": {
+          "input_tokens": 1260,
+          "output_tokens": 0,
+          "state_tokens": 183,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [
+          "KB-CNT-002"
+        ],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "E-01",
+        "repetition": 2,
+        "decision": {
+          "category": "grading",
+          "route_to": "student_support",
+          "confidence": "low",
+          "escalate_to_human": "yes",
+          "rationale": "mixed_topics",
+          "source": "model"
+        },
+        "latency_ms": 633.5437999999995,
+        "usage": {
+          "input_tokens": 435,
+          "output_tokens": 0,
+          "state_tokens": 23,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "E-02",
+        "repetition": 2,
+        "decision": {
+          "category": "course_content",
+          "route_to": "student_support",
+          "confidence": "medium",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "model"
+        },
+        "latency_ms": 4429.280200000008,
+        "usage": {
+          "input_tokens": 1305,
+          "output_tokens": 0,
+          "state_tokens": 192,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [
+          "KB-SUP-001"
+        ],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "E-03",
+        "repetition": 2,
+        "decision": {
+          "category": "prerequisites",
+          "route_to": "advising",
+          "confidence": "medium",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "model"
+        },
+        "latency_ms": 4369.3312000000005,
+        "usage": {
+          "input_tokens": 1270,
+          "output_tokens": 0,
+          "state_tokens": 185,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [
+          "KB-PRE-001"
+        ],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "D-01",
+        "repetition": 2,
+        "decision": {
+          "category": "course_content",
+          "route_to": "student_support",
+          "confidence": "medium",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "model"
+        },
+        "latency_ms": 7738.463199999998,
+        "usage": {
+          "input_tokens": 2560,
+          "output_tokens": 0,
+          "state_tokens": 496,
+          "state_tokens_dropped": 96,
+          "truncated": true,
+          "truncated_questions": [
+            "category",
+            "route_to",
+            "confidence",
+            "escalate_to_human",
+            "rationale"
+          ]
+        },
+        "knowledge_ids": [
+          "KB-SUP-001",
+          "KB-REG-001",
+          "KB-CNT-001"
+        ],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "D-02",
+        "repetition": 2,
+        "decision": {
+          "category": "grading",
+          "route_to": "escalate",
+          "confidence": "medium",
+          "escalate_to_human": "no",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 2566.275199999989,
+        "usage": {
+          "input_tokens": 660,
+          "output_tokens": 0,
+          "state_tokens": 63,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "F-01",
+        "repetition": 2,
+        "decision": {
+          "category": "other",
+          "route_to": "student_support",
+          "confidence": "low",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "fallback_rules"
+        },
+        "latency_ms": 0.004100000005564652,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        },
+        "knowledge_ids": [
+          "KB-FIN-001"
+        ],
+        "path": "fallback_simulated",
+        "model_error": null
+      },
+      {
+        "case_id": "F-02",
+        "repetition": 2,
+        "decision": {
+          "category": "other",
+          "route_to": "instructor",
+          "confidence": "low",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "fallback_rules"
+        },
+        "latency_ms": 0.012900000001536682,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        },
+        "knowledge_ids": [
+          "KB-INT-001"
+        ],
+        "path": "fallback_simulated",
+        "model_error": null
+      },
+      {
+        "case_id": "N-01",
+        "repetition": 3,
+        "decision": {
+          "category": "grading",
+          "route_to": "instructor",
+          "confidence": "high",
+          "escalate_to_human": "yes",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 4782.616699999999,
+        "usage": {
+          "input_tokens": 1370,
+          "output_tokens": 0,
+          "state_tokens": 205,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [
+          "KB-GRD-001"
+        ],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "N-02",
+        "repetition": 3,
+        "decision": {
+          "category": "schedule",
+          "route_to": "department_admin",
+          "confidence": "medium",
+          "escalate_to_human": "yes",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 4537.292400000006,
+        "usage": {
+          "input_tokens": 1305,
+          "output_tokens": 0,
+          "state_tokens": 192,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [
+          "KB-SCH-001"
+        ],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "N-03",
+        "repetition": 3,
+        "decision": {
+          "category": "instructor_contact",
+          "route_to": "instructor",
+          "confidence": "medium",
+          "escalate_to_human": "yes",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 4401.5013000000035,
+        "usage": {
+          "input_tokens": 1260,
+          "output_tokens": 0,
+          "state_tokens": 183,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [
+          "KB-CNT-002"
+        ],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "E-01",
+        "repetition": 3,
+        "decision": {
+          "category": "grading",
+          "route_to": "student_support",
+          "confidence": "low",
+          "escalate_to_human": "yes",
+          "rationale": "mixed_topics",
+          "source": "model"
+        },
+        "latency_ms": 634.4057999999932,
+        "usage": {
+          "input_tokens": 435,
+          "output_tokens": 0,
+          "state_tokens": 23,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "E-02",
+        "repetition": 3,
+        "decision": {
+          "category": "course_content",
+          "route_to": "student_support",
+          "confidence": "medium",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "model"
+        },
+        "latency_ms": 4530.392700000011,
+        "usage": {
+          "input_tokens": 1305,
+          "output_tokens": 0,
+          "state_tokens": 192,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [
+          "KB-SUP-001"
+        ],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "E-03",
+        "repetition": 3,
+        "decision": {
+          "category": "prerequisites",
+          "route_to": "advising",
+          "confidence": "medium",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "model"
+        },
+        "latency_ms": 4522.668699999995,
+        "usage": {
+          "input_tokens": 1270,
+          "output_tokens": 0,
+          "state_tokens": 185,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [
+          "KB-PRE-001"
+        ],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "D-01",
+        "repetition": 3,
+        "decision": {
+          "category": "course_content",
+          "route_to": "student_support",
+          "confidence": "medium",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "model"
+        },
+        "latency_ms": 16918.513199999987,
+        "usage": {
+          "input_tokens": 2560,
+          "output_tokens": 0,
+          "state_tokens": 496,
+          "state_tokens_dropped": 96,
+          "truncated": true,
+          "truncated_questions": [
+            "category",
+            "route_to",
+            "confidence",
+            "escalate_to_human",
+            "rationale"
+          ]
+        },
+        "knowledge_ids": [
+          "KB-SUP-001",
+          "KB-REG-001",
+          "KB-CNT-001"
+        ],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "D-02",
+        "repetition": 3,
+        "decision": {
+          "category": "grading",
+          "route_to": "escalate",
+          "confidence": "medium",
+          "escalate_to_human": "no",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 8231.84050000002,
+        "usage": {
+          "input_tokens": 660,
+          "output_tokens": 0,
+          "state_tokens": 63,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "F-01",
+        "repetition": 3,
+        "decision": {
+          "category": "other",
+          "route_to": "student_support",
+          "confidence": "low",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "fallback_rules"
+        },
+        "latency_ms": 0.011100000003352761,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        },
+        "knowledge_ids": [
+          "KB-FIN-001"
+        ],
+        "path": "fallback_simulated",
+        "model_error": null
+      },
+      {
+        "case_id": "F-02",
+        "repetition": 3,
+        "decision": {
+          "category": "other",
+          "route_to": "instructor",
+          "confidence": "low",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "fallback_rules"
+        },
+        "latency_ms": 0.021399999997811392,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        },
+        "knowledge_ids": [
+          "KB-INT-001"
+        ],
+        "path": "fallback_simulated",
+        "model_error": null
+      },
+      {
+        "case_id": "N-01",
+        "repetition": 4,
+        "decision": {
+          "category": "grading",
+          "route_to": "instructor",
+          "confidence": "high",
+          "escalate_to_human": "yes",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 14824.153099999996,
+        "usage": {
+          "input_tokens": 1370,
+          "output_tokens": 0,
+          "state_tokens": 205,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [
+          "KB-GRD-001"
+        ],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "N-02",
+        "repetition": 4,
+        "decision": {
+          "category": "schedule",
+          "route_to": "department_admin",
+          "confidence": "medium",
+          "escalate_to_human": "yes",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 14025.795599999983,
+        "usage": {
+          "input_tokens": 1305,
+          "output_tokens": 0,
+          "state_tokens": 192,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [
+          "KB-SCH-001"
+        ],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "N-03",
+        "repetition": 4,
+        "decision": {
+          "category": "instructor_contact",
+          "route_to": "instructor",
+          "confidence": "medium",
+          "escalate_to_human": "yes",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 13557.593800000002,
+        "usage": {
+          "input_tokens": 1260,
+          "output_tokens": 0,
+          "state_tokens": 183,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [
+          "KB-CNT-002"
+        ],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "E-01",
+        "repetition": 4,
+        "decision": {
+          "category": "grading",
+          "route_to": "student_support",
+          "confidence": "low",
+          "escalate_to_human": "yes",
+          "rationale": "mixed_topics",
+          "source": "model"
+        },
+        "latency_ms": 2338.5483999999997,
+        "usage": {
+          "input_tokens": 435,
+          "output_tokens": 0,
+          "state_tokens": 23,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "E-02",
+        "repetition": 4,
+        "decision": {
+          "category": "course_content",
+          "route_to": "student_support",
+          "confidence": "medium",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "model"
+        },
+        "latency_ms": 14096.41790000003,
+        "usage": {
+          "input_tokens": 1305,
+          "output_tokens": 0,
+          "state_tokens": 192,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [
+          "KB-SUP-001"
+        ],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "E-03",
+        "repetition": 4,
+        "decision": {
+          "category": "prerequisites",
+          "route_to": "advising",
+          "confidence": "medium",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "model"
+        },
+        "latency_ms": 13372.050300000003,
+        "usage": {
+          "input_tokens": 1270,
+          "output_tokens": 0,
+          "state_tokens": 185,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [
+          "KB-PRE-001"
+        ],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "D-01",
+        "repetition": 4,
+        "decision": {
+          "category": "course_content",
+          "route_to": "student_support",
+          "confidence": "medium",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "model"
+        },
+        "latency_ms": 23324.560999999987,
+        "usage": {
+          "input_tokens": 2560,
+          "output_tokens": 0,
+          "state_tokens": 496,
+          "state_tokens_dropped": 96,
+          "truncated": true,
+          "truncated_questions": [
+            "category",
+            "route_to",
+            "confidence",
+            "escalate_to_human",
+            "rationale"
+          ]
+        },
+        "knowledge_ids": [
+          "KB-SUP-001",
+          "KB-REG-001",
+          "KB-CNT-001"
+        ],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "D-02",
+        "repetition": 4,
+        "decision": {
+          "category": "grading",
+          "route_to": "escalate",
+          "confidence": "medium",
+          "escalate_to_human": "no",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 8210.58169999998,
+        "usage": {
+          "input_tokens": 660,
+          "output_tokens": 0,
+          "state_tokens": 63,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "F-01",
+        "repetition": 4,
+        "decision": {
+          "category": "other",
+          "route_to": "student_support",
+          "confidence": "low",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "fallback_rules"
+        },
+        "latency_ms": 0.005000000004656613,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        },
+        "knowledge_ids": [
+          "KB-FIN-001"
+        ],
+        "path": "fallback_simulated",
+        "model_error": null
+      },
+      {
+        "case_id": "F-02",
+        "repetition": 4,
+        "decision": {
+          "category": "other",
+          "route_to": "instructor",
+          "confidence": "low",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "fallback_rules"
+        },
+        "latency_ms": 0.0348000000230968,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        },
+        "knowledge_ids": [
+          "KB-INT-001"
+        ],
+        "path": "fallback_simulated",
+        "model_error": null
+      },
+      {
+        "case_id": "N-01",
+        "repetition": 5,
+        "decision": {
+          "category": "grading",
+          "route_to": "instructor",
+          "confidence": "high",
+          "escalate_to_human": "yes",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 14887.856499999994,
+        "usage": {
+          "input_tokens": 1370,
+          "output_tokens": 0,
+          "state_tokens": 205,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [
+          "KB-GRD-001"
+        ],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "N-02",
+        "repetition": 5,
+        "decision": {
+          "category": "schedule",
+          "route_to": "department_admin",
+          "confidence": "medium",
+          "escalate_to_human": "yes",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 6034.612999999954,
+        "usage": {
+          "input_tokens": 1305,
+          "output_tokens": 0,
+          "state_tokens": 192,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [
+          "KB-SCH-001"
+        ],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "N-03",
+        "repetition": 5,
+        "decision": {
+          "category": "instructor_contact",
+          "route_to": "instructor",
+          "confidence": "medium",
+          "escalate_to_human": "yes",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 3743.0279000000446,
+        "usage": {
+          "input_tokens": 1260,
+          "output_tokens": 0,
+          "state_tokens": 183,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [
+          "KB-CNT-002"
+        ],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "E-01",
+        "repetition": 5,
+        "decision": {
+          "category": "grading",
+          "route_to": "student_support",
+          "confidence": "low",
+          "escalate_to_human": "yes",
+          "rationale": "mixed_topics",
+          "source": "model"
+        },
+        "latency_ms": 549.9815999999992,
+        "usage": {
+          "input_tokens": 435,
+          "output_tokens": 0,
+          "state_tokens": 23,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "E-02",
+        "repetition": 5,
+        "decision": {
+          "category": "course_content",
+          "route_to": "student_support",
+          "confidence": "medium",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "model"
+        },
+        "latency_ms": 4086.348400000017,
+        "usage": {
+          "input_tokens": 1305,
+          "output_tokens": 0,
+          "state_tokens": 192,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [
+          "KB-SUP-001"
+        ],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "E-03",
+        "repetition": 5,
+        "decision": {
+          "category": "prerequisites",
+          "route_to": "advising",
+          "confidence": "medium",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "model"
+        },
+        "latency_ms": 4094.7814999999828,
+        "usage": {
+          "input_tokens": 1270,
+          "output_tokens": 0,
+          "state_tokens": 185,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [
+          "KB-PRE-001"
+        ],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "D-01",
+        "repetition": 5,
+        "decision": {
+          "category": "course_content",
+          "route_to": "student_support",
+          "confidence": "medium",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "model"
+        },
+        "latency_ms": 7639.605900000024,
+        "usage": {
+          "input_tokens": 2560,
+          "output_tokens": 0,
+          "state_tokens": 496,
+          "state_tokens_dropped": 96,
+          "truncated": true,
+          "truncated_questions": [
+            "category",
+            "route_to",
+            "confidence",
+            "escalate_to_human",
+            "rationale"
+          ]
+        },
+        "knowledge_ids": [
+          "KB-SUP-001",
+          "KB-REG-001",
+          "KB-CNT-001"
+        ],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "D-02",
+        "repetition": 5,
+        "decision": {
+          "category": "grading",
+          "route_to": "escalate",
+          "confidence": "medium",
+          "escalate_to_human": "no",
+          "rationale": "context_needed",
+          "source": "model"
+        },
+        "latency_ms": 2614.7375000000466,
+        "usage": {
+          "input_tokens": 660,
+          "output_tokens": 0,
+          "state_tokens": 63,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "knowledge_ids": [],
+        "path": "model",
+        "model_error": null
+      },
+      {
+        "case_id": "F-01",
+        "repetition": 5,
+        "decision": {
+          "category": "other",
+          "route_to": "student_support",
+          "confidence": "low",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "fallback_rules"
+        },
+        "latency_ms": 0.0068999999784864485,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        },
+        "knowledge_ids": [
+          "KB-FIN-001"
+        ],
+        "path": "fallback_simulated",
+        "model_error": null
+      },
+      {
+        "case_id": "F-02",
+        "repetition": 5,
+        "decision": {
+          "category": "other",
+          "route_to": "instructor",
+          "confidence": "low",
+          "escalate_to_human": "yes",
+          "rationale": "policy_dependent",
+          "source": "fallback_rules"
+        },
+        "latency_ms": 0.010799999989103526,
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 0
+        },
+        "knowledge_ids": [
+          "KB-INT-001"
+        ],
+        "path": "fallback_simulated",
+        "model_error": null
+      }
+    ]
+  }
+}

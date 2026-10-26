@@ -1,0 +1,285 @@
+{
+  "name": "course-inquiry-classification-evaluation",
+  "version": "1.0",
+  "created": "2026-10-26",
+  "purpose": "Pre-defined evaluation dataset for the course inquiry classification and routing decision model.",
+  "expected_results_recorded_before_testing": true,
+  "status": "expected_not_yet_executed",
+  "allowed_decisions": {
+    "category": [
+      "registration",
+      "prerequisites",
+      "schedule",
+      "grading",
+      "course_content",
+      "instructor_contact",
+      "other"
+    ],
+    "route_to": [
+      "registrar",
+      "department_admin",
+      "instructor",
+      "advising",
+      "student_support",
+      "escalate"
+    ],
+    "confidence": ["high", "medium", "low"],
+    "escalate_to_human": ["yes", "no"],
+    "rationale": [
+      "clear_intent",
+      "mixed_topics",
+      "ambiguous",
+      "policy_dependent",
+      "context_needed"
+    ],
+    "source": ["model", "fallback_rules"]
+  },
+  "case_counts": {
+    "normal": 3,
+    "edge": 3,
+    "fallback": 2,
+    "difficult_ambiguous": 2,
+    "total": 10
+  },
+  "cases": [
+    {
+      "case_id": "N-01",
+      "case_type": "normal",
+      "input": {
+        "inquiry_text": "I need to appeal my midterm grade, could you tell me the process?",
+        "course_context": {
+          "course_code": "CS201",
+          "course_name": "Data Structures",
+          "instructor": "Dr. Smith"
+        }
+      },
+      "expected_decision": {
+        "category": "grading",
+        "route_to": "instructor",
+        "confidence": "medium",
+        "escalate_to_human": "yes",
+        "rationale": "policy_dependent",
+        "source": "model"
+      },
+      "expected_knowledge_ids": ["KB-GRD-001"],
+      "expected_fallback_or_review": {
+        "review_expected": "yes",
+        "behavior": "Grade appeals require human review. The instructor handles the first review step; the system must not promise an outcome or quote a deadline. If the model call fails, the rule-based fallback routes grading/appeal text to the instructor and still escalates to a human."
+      },
+      "reason": "The inquiry explicitly names a midterm grade appeal. KB-GRD-001 states that grade appeals start with the instructor and always require human judgment, so the correct category is grading and the correct route is instructor, with escalation enabled."
+    },
+    {
+      "case_id": "N-02",
+      "case_type": "normal",
+      "input": {
+        "inquiry_text": "My Tuesday MATH 250 section meets at what time and in which room?",
+        "course_context": {
+          "course_code": "MATH250",
+          "section": "Tuesday 10:00"
+        }
+      },
+      "expected_decision": {
+        "category": "schedule",
+        "route_to": "department_admin",
+        "confidence": "high",
+        "escalate_to_human": "no",
+        "rationale": "clear_intent",
+        "source": "model"
+      },
+      "expected_knowledge_ids": ["KB-SCH-001"],
+      "expected_fallback_or_review": {
+        "review_expected": "no",
+        "behavior": "This is a routine timetable question and can be auto-routed to the department administrator. If the inquiry instead reports a room conflict, section change, or exam override, review becomes conditional and should be escalated. The conservative fallback path routes schedule text to department_admin with escalation yes."
+      },
+      "reason": "The inquiry contains explicit schedule words (time, section, room) and course context. KB-SCH-001 says routine timetable questions can be answered from the published schedule, so high confidence, department_admin, and no human escalation are expected."
+    },
+    {
+      "case_id": "N-03",
+      "case_type": "normal",
+      "input": {
+        "inquiry_text": "What are Professor Smith's office hours, and how do I email her?",
+        "course_context": {
+          "course_code": "CS201",
+          "instructor": "Dr. Smith"
+        }
+      },
+      "expected_decision": {
+        "category": "instructor_contact",
+        "route_to": "instructor",
+        "confidence": "high",
+        "escalate_to_human": "no",
+        "rationale": "clear_intent",
+        "source": "model"
+      },
+      "expected_knowledge_ids": ["KB-CNT-002"],
+      "expected_fallback_or_review": {
+        "review_expected": "no",
+        "behavior": "No human review is needed for public office-hour or university-email information. Private contact details must not be shared. If the model fails, the instructor-contact rule routes to the instructor and escalates conservatively."
+      },
+      "reason": "The request is explicitly about instructor contact information. KB-CNT-002 marks contact questions as not_required for human review, so the instructor route with no escalation is expected."
+    },
+    {
+      "case_id": "E-01",
+      "case_type": "edge",
+      "input": {
+        "inquiry_text": "My grades?",
+        "course_context": {}
+      },
+      "expected_decision": {
+        "category": "other",
+        "route_to": "escalate",
+        "confidence": "low",
+        "escalate_to_human": "yes",
+        "rationale": "ambiguous",
+        "source": "model"
+      },
+      "expected_knowledge_ids": [],
+      "expected_fallback_or_review": {
+        "review_expected": "yes",
+        "behavior": "The text is exactly at the 10-character minimum but has no actionable detail. Human triage should ask which course, which grade, and what outcome the student wants. The fallback path matches the word 'grades', routes to the instructor, and still marks escalation yes."
+      },
+      "reason": "This is a boundary-length case. Although the topic is grades, there is no course, term, or specific question, so a safe decision is category other, route escalate, low confidence, and human review."
+    },
+    {
+      "case_id": "E-02",
+      "case_type": "edge",
+      "input": {
+        "inquiry_text": "cant log in 2 course site, assignmnt not showin up",
+        "course_context": {}
+      },
+      "expected_decision": {
+        "category": "course_content",
+        "route_to": "student_support",
+        "confidence": "low",
+        "escalate_to_human": "yes",
+        "rationale": "context_needed",
+        "source": "model"
+      },
+      "expected_knowledge_ids": ["KB-SUP-001"],
+      "expected_fallback_or_review": {
+        "review_expected": "yes",
+        "behavior": "Account and access issues go to Student Support rather than the instructor. Human review is appropriate because the message has typos and omits the error message, browser, and time. The fallback path recognizes 'log in' and returns the same category and route with escalation yes."
+      },
+      "reason": "The message is intentionally misspelled and abbreviated, but the access intent is still recognizable. KB-SUP-001 says login/course-site problems belong to Student Support; missing diagnostic detail makes low confidence and review appropriate."
+    },
+    {
+      "case_id": "E-03",
+      "case_type": "edge",
+      "input": {
+        "inquiry_text": "Can I take CS201 without the prerequisite?",
+        "course_context": {
+          "course_code": null,
+          "section": "A"
+        }
+      },
+      "expected_decision": {
+        "category": "prerequisites",
+        "route_to": "advising",
+        "confidence": "medium",
+        "escalate_to_human": "yes",
+        "rationale": "policy_dependent",
+        "source": "model"
+      },
+      "expected_knowledge_ids": ["KB-PRE-001"],
+      "expected_fallback_or_review": {
+        "review_expected": "yes",
+        "behavior": "Advisor review is required before any waiver is promised. The invalid course_code value must be ignored rather than treated as a real code. The fallback path also routes prerequisite text to advising with escalation yes."
+      },
+      "reason": "The core prerequisite question is clear, but the course context contains a null course_code and only a section. KB-PRE-001 requires advisor and department approval for waivers, so the correct decision is prerequisites, advising, and human review despite the clear wording."
+    },
+    {
+      "case_id": "D-01",
+      "case_type": "difficult_ambiguous",
+      "input": {
+        "inquiry_text": "I can't log into Canvas, and I also need to drop the course before the deadline.",
+        "course_context": {}
+      },
+      "expected_decision": {
+        "category": "other",
+        "route_to": "escalate",
+        "confidence": "low",
+        "escalate_to_human": "yes",
+        "rationale": "mixed_topics",
+        "source": "model"
+      },
+      "expected_knowledge_ids": ["KB-SUP-001", "KB-REG-001", "KB-CNT-001"],
+      "expected_fallback_or_review": {
+        "review_expected": "yes",
+        "behavior": "Human triage should split the ticket or contact the student for clarification because the access issue and the drop request have different owners. The fallback path matches 'log in' first and routes to Student Support with escalation yes, but the expected model path is escalate because two policies conflict."
+      },
+      "reason": "The inquiry combines two independent topics with different routes: learning-platform access (Student Support) and dropping a course (Registrar). The word 'deadline' also retrieves the course-content policy, adding another route. The knowledge records conflict, so the guidance to prefer escalation when policies disagree applies."
+    },
+    {
+      "case_id": "D-02",
+      "case_type": "difficult_ambiguous",
+      "input": {
+        "inquiry_text": "I failed a course last term, but I want to move on to the next one in the sequence. Is that possible, and who should I talk to?",
+        "course_context": {
+          "course_code": "CS201"
+        }
+      },
+      "expected_decision": {
+        "category": "prerequisites",
+        "route_to": "advising",
+        "confidence": "low",
+        "escalate_to_human": "yes",
+        "rationale": "context_needed",
+        "source": "model"
+      },
+      "expected_knowledge_ids": [],
+      "expected_fallback_or_review": {
+        "review_expected": "yes",
+        "behavior": "An advisor must check the prerequisite rule, the failed course, and whether a waiver or repeat is allowed. The fallback has no matching rule or strong knowledge hit for the indirect wording, so it defaults to route escalate with escalation yes."
+      },
+      "reason": "The student never says the word 'prerequisite', but the question is about course sequencing after a failure. This is an implicit prerequisite/waiver issue that requires advising and missing academic history, so low confidence and human review are expected."
+    },
+    {
+      "case_id": "F-01",
+      "case_type": "fallback",
+      "input": {
+        "inquiry_text": "I paid my tuition yesterday, but my account still shows a balance. Did my payment go through?",
+        "course_context": {
+          "term": "2026-Spring"
+        }
+      },
+      "expected_decision": {
+        "category": "other",
+        "route_to": "student_support",
+        "confidence": "low",
+        "escalate_to_human": "yes",
+        "rationale": "policy_dependent",
+        "source": "fallback_rules"
+      },
+      "expected_knowledge_ids": ["KB-FIN-001"],
+      "expected_fallback_or_review": {
+        "review_expected": "yes",
+        "behavior": "Trigger the fallback when Laya is unavailable, times out, or returns invalid output. The tuition/payment rule must route to Student Support, escalate to a human, and must not confirm that the payment was received or promise a refund."
+      },
+      "reason": "This is designed as a fallback case. The existing fallback rule matches tuition, paid, payment, and balance, so it deterministically returns category other, route student_support, low confidence, escalation yes, and source fallback_rules. KB-FIN-001 reinforces the same route and prohibits financial promises."
+    },
+    {
+      "case_id": "F-02",
+      "case_type": "fallback",
+      "input": {
+        "inquiry_text": "A classmate copied another student's work and I want to report it. What is the process for academic dishonesty?",
+        "course_context": {
+          "course_code": "CS201"
+        }
+      },
+      "expected_decision": {
+        "category": "other",
+        "route_to": "instructor",
+        "confidence": "low",
+        "escalate_to_human": "yes",
+        "rationale": "policy_dependent",
+        "source": "fallback_rules"
+      },
+      "expected_knowledge_ids": ["KB-INT-001"],
+      "expected_fallback_or_review": {
+        "review_expected": "yes",
+        "behavior": "When Laya is unavailable, no deterministic rule matches this wording. The knowledge fallback should use the top record, KB-INT-001, because its score is at least 3, and route to the instructor with escalation yes. Staff must not determine whether misconduct occurred."
+      },
+      "reason": "This fallback case tests the knowledge-assisted fallback path rather than a regex rule. KB-INT-001 matches academic dishonesty and copied work, marks human_review as required, and defaults to the instructor, so the expected fallback uses that record."
+    }
+  ]
+}

@@ -1,4 +1,10 @@
 import { Hono } from "hono";
+import {
+  formatKnowledgeContext,
+  retrieveKnowledge,
+  type RetrievedKnowledge,
+} from "./knowledge/retrieve";
+
 const app = new Hono<{ Bindings: Env }>();
 
 const LAYA_URL = "http://localhost:8000/v1/systemone";
@@ -51,7 +57,10 @@ function isInSet<T extends string>(value: unknown, set: readonly T[]): value is 
   return typeof value === "string" && (set as readonly string[]).includes(value);
 }
 
-function ruleBasedClassify(inquiryText: string): ClassificationResult {
+function ruleBasedClassify(
+  inquiryText: string,
+  knowledgeHits: RetrievedKnowledge[] = []
+): ClassificationResult {
   const text = (inquiryText || "").toLowerCase();
 
   if (/tuition|bill|invoice|refund|paid|payment|balance/.test(text)) {
@@ -125,6 +134,22 @@ function ruleBasedClassify(inquiryText: string): ClassificationResult {
     };
   }
 
+  const topHit = knowledgeHits[0];
+  if (topHit && topHit.score >= 3) {
+    return {
+      category: topHit.record.category,
+      route_to: topHit.record.default_route,
+      confidence: "low",
+      escalate_to_human:
+        topHit.record.human_review === "not_required" ? "no" : "yes",
+      rationale:
+        topHit.record.human_review === "required"
+          ? "policy_dependent"
+          : "clear_intent",
+      source: "fallback_rules",
+    };
+  }
+
   return {
     category: "other",
     route_to: "escalate",
@@ -135,14 +160,27 @@ function ruleBasedClassify(inquiryText: string): ClassificationResult {
   };
 }
 
-function validateModelOutput(answers: any): { ok: boolean; result?: ClassificationResult } {
-  if (!answers || typeof answers !== "object") return { ok: false };
+function getAnswerChoice(answers: Record<string, unknown>, key: string): unknown {
+  const answer = answers[key];
 
-  const category = answers.category?.choice;
-  const routeTo = answers.route_to?.choice;
-  const confidence = answers.confidence?.choice;
-  const escalate = answers.escalate_to_human?.choice;
-  const rationale = answers.rationale?.choice;
+  if (!answer || typeof answer !== "object" || Array.isArray(answer)) {
+    return undefined;
+  }
+
+  return (answer as { choice?: unknown }).choice;
+}
+
+function validateModelOutput(answers: unknown): { ok: boolean; result?: ClassificationResult } {
+  if (!answers || typeof answers !== "object" || Array.isArray(answers)) {
+    return { ok: false };
+  }
+
+  const answerMap = answers as Record<string, unknown>;
+  const category = getAnswerChoice(answerMap, "category");
+  const routeTo = getAnswerChoice(answerMap, "route_to");
+  const confidence = getAnswerChoice(answerMap, "confidence");
+  const escalate = getAnswerChoice(answerMap, "escalate_to_human");
+  const rationale = getAnswerChoice(answerMap, "rationale");
 
   if (
     !isInSet(category, ALLOWED_CATEGORIES) ||
@@ -171,7 +209,13 @@ function validateModelOutput(answers: any): { ok: boolean; result?: Classificati
   };
 }
 
-function buildLayaBody(inquiryText: string, courseContext: any) {
+function buildLayaBody(
+  inquiryText: string,
+  courseContext: unknown,
+  knowledgeHits: RetrievedKnowledge[]
+) {
+  const knowledgeContext = formatKnowledgeContext(knowledgeHits);
+  const hasKnowledge = knowledgeContext.length > 0;
   const categories = {
     registration: "Course registration, add/drop, waitlists, enrollment holds",
     prerequisites: "Prerequisite checks, waivers, course sequencing",
@@ -195,16 +239,24 @@ function buildLayaBody(inquiryText: string, courseContext: any) {
     state: {
       inquiry_text: inquiryText,
       course_context: courseContext || {},
+      retrieved_policies: knowledgeContext,
+      knowledge_guidance: hasKnowledge
+        ? "Treat retrieved_policies as the authoritative policy context. Prefer the most relevant policy's default_route. If any selected policy has human_review=required, set escalate_to_human to yes. If policies conflict or the inquiry mixes topics, prefer escalation."
+        : "No matching policy was retrieved. Classify from the inquiry text only, and escalate when the decision depends on policy or missing context.",
     },
     questions: {
       category: {
         type: "choice",
-        instructions: "Classify this course inquiry into the most appropriate category.",
+        instructions: hasKnowledge
+          ? "Classify this course inquiry into the most appropriate category. Use retrieved_policies to resolve terminology and policy-dependent wording."
+          : "Classify this course inquiry into the most appropriate category.",
         criteria: categories,
       },
       route_to: {
         type: "choice",
-        instructions: "Which team should this be routed to?",
+        instructions: hasKnowledge
+          ? "Which team should this be routed to? Prefer the default_route of the most relevant retrieved policy; if policies disagree, choose escalate."
+          : "Which team should this be routed to?",
         criteria: routes,
       },
       confidence: {
@@ -218,7 +270,9 @@ function buildLayaBody(inquiryText: string, courseContext: any) {
       },
       escalate_to_human: {
         type: "choice",
-        instructions: "Should this be escalated to a human for review?",
+        instructions: hasKnowledge
+          ? "Should this be escalated to a human for review? Policies marked human_review=required must be escalated. Conditional policies may be auto-routed only when the inquiry is routine and well supported."
+          : "Should this be escalated to a human for review?",
         criteria: {
           yes: "Yes, needs human judgment",
           no: "No, safe to auto-route",
@@ -237,6 +291,15 @@ function buildLayaBody(inquiryText: string, courseContext: any) {
       },
     },
   };
+}
+
+function summarizeKnowledgeHits(hits: RetrievedKnowledge[]) {
+  return hits.map(({ record, score, matched_keywords }) => ({
+    id: record.id,
+    title: record.title,
+    score: Number(score.toFixed(2)),
+    matched_keywords,
+  }));
 }
 
 type Course = {
@@ -541,7 +604,7 @@ app.delete("/api/courses/:id", async (c) => {
 });
 
 app.post("/api/inquiries/classify", async (c) => {
-  let body: any;
+  let body: unknown;
 
   try {
     body = await c.req.json();
@@ -549,11 +612,18 @@ app.post("/api/inquiries/classify", async (c) => {
     return c.json({ error: "Invalid JSON body" }, 400);
   }
 
+  const bodyRecord =
+    body && typeof body === "object" && !Array.isArray(body)
+      ? (body as Record<string, unknown>)
+      : {};
   const inquiryText =
-    typeof body?.inquiry_text === "string" ? body.inquiry_text.trim() : "";
+    typeof bodyRecord.inquiry_text === "string"
+      ? bodyRecord.inquiry_text.trim()
+      : "";
   const courseContext =
-    body?.course_context && typeof body.course_context === "object"
-      ? body.course_context
+    bodyRecord.course_context &&
+    typeof bodyRecord.course_context === "object"
+      ? bodyRecord.course_context
       : {};
 
   if (inquiryText.length < 10 || inquiryText.length > 2000) {
@@ -563,6 +633,8 @@ app.post("/api/inquiries/classify", async (c) => {
     );
   }
 
+  const knowledgeHits = retrieveKnowledge(inquiryText, courseContext);
+
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), LAYA_TIMEOUT_MS);
 
@@ -570,7 +642,9 @@ app.post("/api/inquiries/classify", async (c) => {
     const res = await fetch(LAYA_URL, {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify(buildLayaBody(inquiryText, courseContext)),
+      body: JSON.stringify(
+        buildLayaBody(inquiryText, courseContext, knowledgeHits)
+      ),
       signal: controller.signal,
     });
     clearTimeout(timeoutId);
@@ -579,7 +653,7 @@ app.post("/api/inquiries/classify", async (c) => {
       throw new Error(`HTTP ${res.status}`);
     }
 
-    const data: any = await res.json();
+    const data = (await res.json()) as { answers?: unknown };
     const validated = validateModelOutput(data?.answers);
 
     if (!validated.ok || !validated.result) {
@@ -589,25 +663,27 @@ app.post("/api/inquiries/classify", async (c) => {
     return c.json({
       status: "routed",
       classification: validated.result,
+      knowledge_context: summarizeKnowledgeHits(knowledgeHits),
       ticket: {
         id: `T-${crypto.randomUUID().slice(0, 8)}`,
         destination: validated.result.route_to,
         escalated: validated.result.escalate_to_human === "yes",
       },
     });
-  } catch (err: any) {
+  } catch (err) {
     clearTimeout(timeoutId);
-    const fallback = ruleBasedClassify(inquiryText);
+    const fallback = ruleBasedClassify(inquiryText, knowledgeHits);
 
     return c.json({
       status: "routed_with_fallback",
       classification: fallback,
+      knowledge_context: summarizeKnowledgeHits(knowledgeHits),
       ticket: {
         id: `T-${crypto.randomUUID().slice(0, 8)}`,
         destination: fallback.route_to,
         escalated: fallback.escalate_to_human === "yes",
       },
-      error: err?.message || "model_unavailable",
+      error: err instanceof Error ? err.message : "model_unavailable",
     });
   }
 });
